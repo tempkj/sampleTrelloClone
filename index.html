@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kanban Board</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+    }
+
+    .board {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .column {
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      padding: 10px;
+      width: 300px;
+      min-height: 400px;
+      flex-shrink: 0;
+    }
+
+    .column h3 {
+      text-align: center;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 6px;
+      padding: 10px;
+      margin: 10px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      cursor: grab;
+    }
+
+    .card:active {
+      cursor: grabbing;
+    }
+  </style>
+</head>
+<body>
+  <div class="board">
+    <div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h3>To Do</h3>
+      <div class="card" draggable="true" ondragstart="drag(event)" id="card1">Prepare Docs</div>
+      <div class="card" draggable="true" ondragstart="drag(event)" id="card2">Design Homepage</div>
+    </div>
+    <div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h3>In Progress</h3>
+      <div class="card" draggable="true" ondragstart="drag(event)" id="card3">Build Backend</div>
+    </div>
+    <div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h3>Done</h3>
+      <div class="card" draggable="true" ondragstart="drag(event)" id="card4">Login Page</div>
+    </div>
+  </div>
+
+  <script>
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+      ev.preventDefault();
+      const data = ev.dataTransfer.getData("text");
+      const card = document.getElementById(data);
+      if (ev.target.classList.contains("column")) {
+        ev.target.appendChild(card);
+      } else if (ev.target.classList.contains("card")) {
+        ev.target.parentNode.insertBefore(card, ev.target.nextSibling);
+      }
+    }
+  </script>
+</body>
+</html>
